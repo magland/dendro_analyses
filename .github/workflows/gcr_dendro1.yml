@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "dendro1/**"
+      - "apps/dendro1/**"
   workflow_dispatch:
 
 jobs:
