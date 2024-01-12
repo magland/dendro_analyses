@@ -34,4 +34,4 @@ jobs:
           -t ghcr.io/magland/$NAME:latest \
           --cache-to type=inline \
           --cache-from type=registry,ref=ghcr.io/magland/$NAME:latest \
-          -f ./$NAME/Dockerfile .
+          -f ./apps/$NAME/Dockerfile .
