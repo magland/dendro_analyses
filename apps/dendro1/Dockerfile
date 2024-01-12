@@ -13,4 +13,4 @@ RUN pip install dendro==0.1.24
 
 # Copy files into the container
 RUN mkdir /app
-COPY spike_sorting_analysis/*.py /app/
+COPY apps/dendro1/*.py /app/
