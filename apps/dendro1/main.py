@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+
 from typing import TYPE_CHECKING
 from dendro.sdk import App, ProcessorBase, InputFile, OutputFile
 from dendro.sdk import BaseModel, Field
@@ -20,8 +23,7 @@ class TuningCurves2DContext(BaseModel):
         description="Path to spatial series within NWB file, e.g. 'processing/behavior/Position/SpatialSeriesLED1'"
     )
     units_path: str = Field(
-        default="units",
-        description="Path to units within NWB file, default: 'units'"
+        default="units", description="Path to units within NWB file, default: 'units'"
     )
     num_bins: int = Field(
         description="Number of bins (in one dimension) for tuning curves"
@@ -87,6 +89,8 @@ class TuningCurves2DProcessor(ProcessorBase):
             f.create_dataset("x_bin_positions", data=x_bin_positions)
             f.create_dataset("y_bin_positions", data=y_bin_positions)
             f.attrs["unit_ids"] = [x for x in unit_names]
+            f.attrs["type"] = "tuning_curves_2d"
+            f.attrs["format_version"] = 1
 
         output_nh5_fname = "output.nh5"
         h5_to_nh5(output_h5_fname, output_nh5_fname)
