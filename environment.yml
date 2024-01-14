@@ -2,7 +2,8 @@ channels:
   - defaults
   - conda-forge
 dependencies:
-  - conda-forge::pynwb
+  - conda-forge::hdmf>=3.11.0, <4.0.0
   - pip:
-    - pynapple
-    - remfile
+    - pynwb>=2.5.0, <3.0.0
+    - pynapple>=0.5.0, <0.6.0
+    - remfile>=0.1.10, <0.2.0
