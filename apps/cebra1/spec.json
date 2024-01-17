@@ -1,0 +1,56 @@
+{
+    "name": "cebra1",
+    "description": "Cebra processors",
+    "appImage": "ghcr.io/magland/cebra1:latest",
+    "appExecutable": "/app/main.py",
+    "executable": "/app/main.py",
+    "processors": [
+        {
+            "name": "cebra1.cebra1_nwb",
+            "description": "Fit a CEBRA model to data in an NWB file",
+            "label": "cebra1.cebra1_nwb",
+            "inputs": [
+                {
+                    "name": "input",
+                    "description": "Input NWB file"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "output",
+                    "description": "Output .nh5 file"
+                },
+                {
+                    "name": "output_model",
+                    "description": "Output .model file"
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "timeseries_name",
+                    "description": "Timeseries name, e.g. cursor_pos",
+                    "type": "str"
+                },
+                {
+                    "name": "max_iterations",
+                    "description": "Max iterations",
+                    "type": "int"
+                }
+            ],
+            "attributes": [
+                {
+                    "name": "wip",
+                    "value": true
+                }
+            ],
+            "tags": [
+                {
+                    "tag": "cebra"
+                },
+                {
+                    "tag": "nwb"
+                }
+            ]
+        }
+    ]
+}
