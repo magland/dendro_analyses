@@ -64,7 +64,7 @@ class Cebra1NwbProcessor(ProcessorBase):
         dataset = Dataset(input_nwb)
         timeseries = getattr(dataset, timeseries_name)
 
-        model = cebra.CEBRA(
+        model: cebra = cebra.CEBRA(
             # Our selected model will use 10 time bins (200ms) as its input
             model_architecture="offset10-model",
 
@@ -95,6 +95,11 @@ class Cebra1NwbProcessor(ProcessorBase):
             dataset.spikes[~is_nan],
             timeseries[~is_nan]
         )
+
+        print('Saving model...')
+        model.save('output.model')
+        print('Uploading model...')
+        context.output_model.upload('output.model')
 
         print('Computing embedding...')
         # NOTE: we are going to need to worry about the NaNs here
