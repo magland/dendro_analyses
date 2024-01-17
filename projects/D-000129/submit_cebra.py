@@ -33,7 +33,7 @@ def main():
             den.SubmitJobParameter(name="timeseries_name", value=timeseries_name)
         ],
         required_resources=den.DendroJobRequiredResources(
-            numCpus=4, numGpus=0, memoryGb=12, timeSec=60 * 60
+            numCpus=4, numGpus=1, memoryGb=12, timeSec=60 * 60
         ),
         run_method="aws_batch",
     )

@@ -32,6 +32,10 @@ jobs:
           NAME="cebra1" && \
           docker buildx build --push \
           -t ghcr.io/magland/$NAME:latest \
-          --cache-to type=inline \
-          --cache-from type=registry,ref=ghcr.io/magland/$NAME:latest \
           -f ./apps/$NAME/Dockerfile .
+        # Don't cache for now b/c it seems suboptimal
+        # docker buildx build --push \
+        # -t ghcr.io/magland/$NAME:latest \
+        # --cache-to type=inline \
+        # --cache-from type=registry,ref=ghcr.io/magland/$NAME:latest \
+        # -f ./apps/$NAME/Dockerfile .
