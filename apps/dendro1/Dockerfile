@@ -9,15 +9,15 @@ RUN pip install pynwb==2.5.0
 RUN pip install pynapple==0.5.0
 
 # Install dendro
-# RUN pip install dendro==0.1.24
+RUN pip install dendro==0.1.32
 
-# Install dendro from source
-RUN git clone https://github.com/flatironinstitute/dendro.git /src/dendro && \
-    echo "attempt1" && \
-    cd /src/dendro && \
-    git checkout folder-support && \
-    cd python && \
-    pip install -e .
+# # Install dendro from source
+# RUN git clone https://github.com/flatironinstitute/dendro.git /src/dendro && \
+#     echo "attempt1" && \
+#     cd /src/dendro && \
+#     git checkout folder-support && \
+#     cd python && \
+#     pip install -e .
 
 # Copy files into the container
 RUN mkdir /app

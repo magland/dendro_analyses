@@ -6,7 +6,6 @@ from tempfile import TemporaryDirectory
 from typing import TYPE_CHECKING
 from dendro.sdk import App, ProcessorBase, InputFile, OutputFile, OutputFolder, InputFolder
 from dendro.sdk import BaseModel, Field
-from matplotlib.pylab import f
 
 if TYPE_CHECKING:
     import pynwb
