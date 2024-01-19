@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
 
+import os
 from tempfile import TemporaryDirectory
 from typing import TYPE_CHECKING
 from dendro.sdk import App, ProcessorBase, InputFile, OutputFile, OutputFolder, InputFolder
 from dendro.sdk import BaseModel, Field
+from matplotlib.pylab import f
 
 if TYPE_CHECKING:
     import pynwb
@@ -148,7 +150,9 @@ class TarProcessor(ProcessorBase):
         output_fname = 'output.tar'
         print(f'Creating tar file: {output_fname}')
         with tarfile.open(output_fname, "w") as tar:
-            tar.add('input_folder')
+            # add each of the files and directories inside input_folder
+            for name in os.listdir("input_folder"):
+                tar.add(f"input_folder/{name}", arcname=name)
         print(f'Uploading tar file: {output_fname}')
         output.upload(output_fname)
 
