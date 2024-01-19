@@ -15,6 +15,7 @@
                     "description": "Input NWB file"
                 }
             ],
+            "inputFolders": [],
             "outputs": [
                 {
                     "name": "output",
@@ -25,6 +26,7 @@
                     "description": "Output .model file"
                 }
             ],
+            "outputFolders": [],
             "parameters": [
                 {
                     "name": "timeseries_name",

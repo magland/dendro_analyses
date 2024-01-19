@@ -15,12 +15,14 @@
                     "description": "Input NWB file"
                 }
             ],
+            "inputFolders": [],
             "outputs": [
                 {
                     "name": "output",
                     "description": "Output .nh5 file"
                 }
             ],
+            "outputFolders": [],
             "parameters": [
                 {
                     "name": "spatial_series_path",
@@ -53,6 +55,82 @@
                     "tag": "nwb"
                 }
             ]
+        },
+        {
+            "name": "dendro1.create_sample_folder",
+            "description": "Create a sample folder for testing purposes",
+            "label": "dendro1.create_sample_folder",
+            "inputs": [],
+            "inputFolders": [],
+            "outputs": [],
+            "outputFolders": [
+                {
+                    "name": "output",
+                    "description": "Output folder"
+                }
+            ],
+            "parameters": [],
+            "attributes": [
+                {
+                    "name": "wip",
+                    "value": true
+                }
+            ],
+            "tags": []
+        },
+        {
+            "name": "dendro1.tar",
+            "description": "Create a tar file from a folder",
+            "label": "dendro1.tar",
+            "inputs": [],
+            "inputFolders": [
+                {
+                    "name": "input",
+                    "description": "Input folder"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "output",
+                    "description": "Output .tar file"
+                }
+            ],
+            "outputFolders": [],
+            "parameters": [],
+            "attributes": [
+                {
+                    "name": "wip",
+                    "value": true
+                }
+            ],
+            "tags": []
+        },
+        {
+            "name": "dendro1.untar",
+            "description": "Extract a tar file into a folder",
+            "label": "dendro1.untar",
+            "inputs": [
+                {
+                    "name": "input",
+                    "description": "Input .tar file"
+                }
+            ],
+            "inputFolders": [],
+            "outputs": [],
+            "outputFolders": [
+                {
+                    "name": "output",
+                    "description": "Output folder"
+                }
+            ],
+            "parameters": [],
+            "attributes": [
+                {
+                    "name": "wip",
+                    "value": true
+                }
+            ],
+            "tags": []
         }
     ]
 }
