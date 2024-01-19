@@ -13,6 +13,7 @@ RUN pip install pynapple==0.5.0
 
 # Install dendro from source
 RUN git clone https://github.com/flatironinstitute/dendro.git /src/dendro && \
+    echo "attempt1" && \
     cd /src/dendro && \
     git checkout folder-support && \
     cd python && \
