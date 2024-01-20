@@ -24,20 +24,29 @@ def process_dandiset(dandiset_id: str, output_fname: str):
         existing = None
     parsed_url = da.parse_dandi_url(f"https://dandiarchive.org/dandiset/{dandiset_id}")
     X = DandiNwbMetaDandiset(
-        dandiset_id="000618", dandiset_version="draft", nwb_assets=[]
+        dandiset_id=dandiset_id, dandiset_version="draft", nwb_assets=[]
     )
     with parsed_url.navigate() as (client, dandiset, assets):
+        asset_num = 0
         for asset in dandiset.get_assets():
+            asset_num += 1
             if asset.path.endswith(".nwb"):
                 item = next(
                     (x for x in existing.nwb_assets if x.asset_id == asset.identifier),
                     None,
                 ) if existing else None
                 if item:
-                    print(f"{X.dandiset_id} | {asset.path} | already processed")
+                    print(f"{asset_num}: {X.dandiset_id} | {asset.path} | already processed")
                     X.nwb_assets.append(item)
                     continue
-                print(f"{X.dandiset_id} | {asset.path}")
+                if os.path.exists(f'cache/{dandiset_id}/{asset.identifier}'):
+                    with open(f'cache/{dandiset_id}/{asset.identifier}', 'r') as f:
+                        item = json.load(f)
+                        item = DandiNwbMetaAsset(**item)
+                        print(f"{asset_num}: {X.dandiset_id} | {asset.path} | from cache")
+                        X.nwb_assets.append(item)
+                        continue
+                print(f"{asset_num}: {X.dandiset_id} | {asset.path}")
                 A = DandiNwbMetaAsset(
                     asset_id=asset.identifier,
                     asset_path=asset.path,
@@ -64,6 +73,9 @@ def process_dandiset(dandiset_id: str, output_fname: str):
                             )
                         )
                 X.nwb_assets.append(A)
+                os.makedirs(f'cache/{dandiset_id}', exist_ok=True)
+                with open(f'cache/{dandiset_id}/{asset.identifier}', 'w') as f:
+                    json.dump(A.dict(), f, indent=2)
     if output_fname.endswith(".gz"):
         with gzip.open(output_fname, "wb") as f:
             f.write(json.dumps(X.dict()).encode())
