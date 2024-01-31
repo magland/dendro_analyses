@@ -11,6 +11,7 @@ from folder_io.folder_io import (
     UntarProcessor,
 )
 from quip.quip import QuipProcessor
+from units_vis.units_vis import UnitsVisProcessor
 
 app = App(
     name="dendro1",
@@ -25,6 +26,7 @@ app.add_processor(CreateSampleFolderProcessor)
 app.add_processor(TarProcessor)
 app.add_processor(UntarProcessor)
 app.add_processor(QuipProcessor)
+app.add_processor(UnitsVisProcessor)
 
 if __name__ == "__main__":
     app.run()

@@ -14,6 +14,9 @@ RUN pip install pynapple==0.5.0
 # Install mountainsort5
 RUN pip install mountainsort5==0.5.3
 
+# Install sortingview
+RUN pip install sortingview==0.13.1
+
 # Install dendro
 RUN pip install dendro==0.1.32
 
@@ -31,3 +34,4 @@ COPY apps/dendro1/*.py /app/
 COPY apps/dendro1/folder_io/*.py /app/folder_io/
 COPY apps/dendro1/quip/*.py /app/quip/
 COPY apps/dendro1/tuning_curves_2d/*.py /app/tuning_curves_2d/
+COPY apps/dendro1/units_vis/*.py /app/units_vis/

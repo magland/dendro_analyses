@@ -167,6 +167,37 @@
                 }
             ],
             "tags": []
+        },
+        {
+            "name": "dendro1.units_vis",
+            "description": "Create a visualization for the unis in an NWB file",
+            "label": "dendro1.units_vis",
+            "inputs": [
+                {
+                    "name": "input",
+                    "description": "Input NWB file"
+                }
+            ],
+            "inputFolders": [],
+            "outputs": [
+                {
+                    "name": "output",
+                    "description": "Output .figurl file"
+                }
+            ],
+            "outputFolders": [],
+            "parameters": [],
+            "attributes": [
+                {
+                    "name": "wip",
+                    "value": true
+                }
+            ],
+            "tags": [
+                {
+                    "tag": "nwb"
+                }
+            ]
         }
     ]
 }
