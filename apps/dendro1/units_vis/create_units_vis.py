@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Optional
 import numpy as np
 import h5py
 import spikeinterface as si
@@ -7,35 +7,32 @@ import remfile
 from .compute_correlograms_data import compute_correlogram_data
 
 # with remfile support
+# and support for units_path
 from .NwbExtractors import NwbSortingExtractor
 
 
-def create_units_vis(url):
-    sorting = NwbSortingExtractor(url, stream_mode="remfile")
+def create_units_vis(url, *, units_path: Optional[str] = None):
+    sorting = NwbSortingExtractor(url, stream_mode="remfile", units_path=units_path)
     remf = remfile.File(url)
-    with h5py.File(remf, 'r') as file:
+    with h5py.File(remf, "r") as file:
         v_rp = create_raster_plot(sorting=sorting)
         v_ac = create_autocorrelograms(sorting=sorting)
         v_u = create_units_table(unit_ids=sorting.get_unit_ids(), file=file)
 
     v_right = vv.Splitter(
-        item1=vv.LayoutItem(v_u),
-        item2=vv.LayoutItem(v_rp),
-        direction='vertical'
+        item1=vv.LayoutItem(v_u), item2=vv.LayoutItem(v_rp), direction="vertical"
     )
 
     v = vv.Splitter(
         item1=vv.LayoutItem(v_ac, stretch=1),
         item2=vv.LayoutItem(v_right, stretch=2),
-        direction='horizontal'
+        direction="horizontal",
     )
 
     return v
 
 
-def create_raster_plot(
-    *, sorting: si.BaseSorting, height=500
-):
+def create_raster_plot(*, sorting: si.BaseSorting, height=500):
     plot_items: List[vv.RasterPlotItem] = []
     min_spike_time = np.inf
     max_spike_time = -np.inf
@@ -51,7 +48,7 @@ def create_raster_plot(
                 unit_id=unit_id, spike_times_sec=spike_times_sec.astype(np.float32)
             )
         )
-    
+
     # Let's start at 0
     if min_spike_time > 0:
         min_spike_time = 0
@@ -64,23 +61,37 @@ def create_raster_plot(
     )
     return view
 
+
 def create_autocorrelograms(*, sorting: si.BaseSorting):
     autocorrelogram_items: List[vv.AutocorrelogramItem] = []
     for unit_id in sorting.get_unit_ids():
-        a = compute_correlogram_data(sorting=sorting, unit_id1=unit_id, unit_id2=None, window_size_msec=50, bin_size_msec=1)
+        a = compute_correlogram_data(
+            sorting=sorting,
+            unit_id1=unit_id,
+            unit_id2=None,
+            window_size_msec=50,
+            bin_size_msec=1,
+        )
         bin_edges_sec = a["bin_edges_sec"]
         bin_counts = a["bin_counts"]
-        autocorrelogram_items.append(vv.AutocorrelogramItem(unit_id=unit_id, bin_edges_sec=bin_edges_sec, bin_counts=bin_counts))
+        autocorrelogram_items.append(
+            vv.AutocorrelogramItem(
+                unit_id=unit_id, bin_edges_sec=bin_edges_sec, bin_counts=bin_counts
+            )
+        )
     view = vv.Autocorrelograms(autocorrelograms=autocorrelogram_items)
     return view
 
-def create_units_table(*, unit_ids: List[Union[int, str]], file: h5py.File):
-    colnames = file['/units'].attrs['colnames']
+
+def create_units_table(*, unit_ids: List[Union[int, str]], file: h5py.File, units_path: Optional[str] = None):
+    if units_path is None:
+        units_path = "/units"
+    colnames = file[units_path].attrs["colnames"]
     columns: List[vv.UnitsTableColumn] = []
 
     values_for_columns = {}
     for c in colnames:
-        a = file['/units'][c]
+        a = file[units_path][c]
         if a.ndim == 1 and a.shape[0] == len(unit_ids):
             print(f"Found column {c}")
             if a.dtype == np.float32:
@@ -98,18 +109,18 @@ def create_units_table(*, unit_ids: List[Union[int, str]], file: h5py.File):
             elif a.dtype == np.int16:
                 dd = "int"
                 values = a[()].astype(np.int32).tolist()
-            elif a.dtype == np.dtype('O'):
+            elif a.dtype == np.dtype("O"):
                 dd = "string"
-                values = [v.decode('utf-8') for v in a[()]]
-            elif a.dtype == np.dtype('S'):
+                values = [v.decode("utf-8") for v in a[()]]
+            elif a.dtype == np.dtype("S"):
                 dd = "string"
-                values = [v.decode('utf-8') for v in a[()]]
+                values = [v.decode("utf-8") for v in a[()]]
             else:
                 dd = None
                 values = None
             columns.append(vv.UnitsTableColumn(key=c, label=c, dtype=dd))
             values_for_columns[c] = values
-    
+
     rows: List[vv.UnitsTableRow] = []
     for unit_id in unit_ids:
         values = {"unitId": unit_id}

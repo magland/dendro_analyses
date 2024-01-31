@@ -432,9 +432,10 @@ class NwbSortingExtractor(BaseSorting):
         The number of timestamp samples to use to estimate the rate.
         Used if "rate" is not specified in the ElectricalSeries.
     stream_mode: str or None, default: None
-        Specify the stream mode: "fsspec" or "ros3".
+        Specify the stream mode: "fsspec" or "ros3" or "remfile".
     stream_cache_path: str or Path or None, default: None
         Local path for caching. If None it uses cwd
+    units_path: str or None, default: None
 
     Returns
     -------
@@ -455,6 +456,7 @@ class NwbSortingExtractor(BaseSorting):
         samples_for_rate_estimation: int = 100000,
         stream_mode: str | None = None,
         stream_cache_path: str | Path | None = None,
+        units_path: str | None = None,
     ):
         try:
             from pynwb import NWBHDF5IO, NWBFile
@@ -495,7 +497,8 @@ class NwbSortingExtractor(BaseSorting):
             self.io = NWBHDF5IO(file_path_, mode="r", load_namespaces=True)
 
         self._nwbfile = self.io.read()
-        units_ids = list(self._nwbfile.units.id[:])
+        units_object = _get_units_object(self._nwbfile, units_path)
+        units_ids = list(units_object.id[:])
 
         timestamps = None
         if sampling_frequency is None:
@@ -520,11 +523,11 @@ class NwbSortingExtractor(BaseSorting):
         # store units properties and spike features to dictionaries
         properties = dict()
 
-        for column in list(self._nwbfile.units.colnames):
+        for column in list(units_object.colnames):
             if column == "spike_times":
                 continue
             # if it is unit_property
-            property_values = self._nwbfile.units[column][:]
+            property_values = units_object[column][:]
 
             # only load columns with same shape for all units
             if np.all(p.shape == property_values[0].shape for p in property_values):
@@ -573,7 +576,8 @@ class NwbSortingSegment(BaseSortingSegment):
             start_frame = 0
         if end_frame is None:
             end_frame = np.inf
-        times = self._nwbfile.units["spike_times"][list(self._nwbfile.units.id[:]).index(unit_id)][:]
+        units_object = _get_units_object(self._nwbfile)
+        times = units_object["spike_times"][list(units_object.id[:]).index(unit_id)][:]
 
         if self._timestamps is not None:
             frames = np.searchsorted(times, self.timestamps).astype("int64")
@@ -618,3 +622,15 @@ def read_nwb(file_path, load_recording=True, load_sorting=False, electrical_seri
         outputs = outputs[0]
 
     return outputs
+
+
+def _get_units_object(nwbfile, units_path: Optional[str] = None):
+    if not units_path:
+        return nwbfile.units
+    parts = [p for p in units_path.split("/") if p]
+    if parts[0] != 'processing':
+        raise ValueError(f'Not a supported units path: {units_path}')
+    x = nwbfile.processing
+    for p in parts[1:]:
+        x = x[p]
+    return x
