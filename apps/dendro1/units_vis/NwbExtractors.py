@@ -541,7 +541,8 @@ class NwbSortingExtractor(BaseSorting):
 
         BaseSorting.__init__(self, sampling_frequency=sampling_frequency, unit_ids=units_ids)
         sorting_segment = NwbSortingSegment(
-            nwbfile=self._nwbfile, sampling_frequency=sampling_frequency, timestamps=timestamps
+            nwbfile=self._nwbfile, sampling_frequency=sampling_frequency, timestamps=timestamps,
+            units_path=units_path
         )
         self.add_sorting_segment(sorting_segment)
 
@@ -563,11 +564,12 @@ class NwbSortingExtractor(BaseSorting):
 
 
 class NwbSortingSegment(BaseSortingSegment):
-    def __init__(self, nwbfile, sampling_frequency, timestamps):
+    def __init__(self, nwbfile, sampling_frequency, timestamps, units_path: Optional[str] = None):
         BaseSortingSegment.__init__(self)
         self._nwbfile = nwbfile
         self._sampling_frequency = sampling_frequency
         self._timestamps = timestamps
+        self._units_path = units_path
 
     def get_unit_spike_train(
         self,
@@ -580,7 +582,7 @@ class NwbSortingSegment(BaseSortingSegment):
             start_frame = 0
         if end_frame is None:
             end_frame = np.inf
-        units_object = _get_units_object(self._nwbfile)
+        units_object = _get_units_object(self._nwbfile, self._units_path)
         times = units_object["spike_times"][list(units_object.id[:]).index(unit_id)][:]
 
         if self._timestamps is not None:
