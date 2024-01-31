@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 
-from typing import Optional
 from dendro.sdk import ProcessorBase, InputFile, OutputFile
 from dendro.sdk import BaseModel, Field
 
@@ -9,9 +8,9 @@ from dendro.sdk import BaseModel, Field
 class UnitsVisContext(BaseModel):
     input: InputFile = Field(description="Input NWB file")
     output: OutputFile = Field(description="Output .figurl file")
-    units_path: Optional[str] = Field(
-        default=None,
-        description="Path to the units table. If None, uses the default location for NWB files",
+    units_path: str = Field(
+        default='',
+        description="Path to the units table. If empty, uses the default location for NWB files",
     )
 
 
@@ -27,7 +26,7 @@ class UnitsVisProcessor(ProcessorBase):
         from .create_units_vis import create_units_vis
 
         url = context.input.get_url()
-        units_path = context.units_path
+        units_path = context.units_path if context.units_path else None
 
         view = create_units_vis(url, units_path=units_path)
         figurl = view.url(label="Units visualization")

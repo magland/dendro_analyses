@@ -186,7 +186,14 @@
                 }
             ],
             "outputFolders": [],
-            "parameters": [],
+            "parameters": [
+                {
+                    "name": "units_path",
+                    "description": "Path to the units table. If empty, uses the default location for NWB files",
+                    "type": "str",
+                    "default": ""
+                }
+            ],
             "attributes": [
                 {
                     "name": "wip",
