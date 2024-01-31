@@ -8,6 +8,7 @@ from .compute_correlograms_data import compute_correlogram_data
 
 # with remfile support
 # and support for units_path
+# and tolerates no electrical series (sets sampling frequency to 0)
 from .NwbExtractors import NwbSortingExtractor
 
 
