@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 
+from typing import Optional
 from dendro.sdk import ProcessorBase, InputFile, OutputFile
 from dendro.sdk import BaseModel, Field
 
@@ -11,6 +12,10 @@ class UnitsVisContext(BaseModel):
     units_path: str = Field(
         default='',
         description="Path to the units table. If empty, uses the default location for NWB files",
+    )
+    sampling_frequency: Optional[float] = Field(
+        default=None,
+        description="Sampling frequency. If None, will try to read from the NWB file",
     )
 
 
@@ -27,8 +32,9 @@ class UnitsVisProcessor(ProcessorBase):
 
         url = context.input.get_url()
         units_path = context.units_path if context.units_path else None
+        sampling_frequency = context.sampling_frequency
 
-        view = create_units_vis(url, units_path=units_path)
+        view = create_units_vis(url, units_path=units_path, sampling_frequency=sampling_frequency)
         figurl = view.url(label="Units visualization")
 
         output_fname = "output.figurl"

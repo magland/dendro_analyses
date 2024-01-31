@@ -192,6 +192,12 @@
                     "description": "Path to the units table. If empty, uses the default location for NWB files",
                     "type": "str",
                     "default": ""
+                },
+                {
+                    "name": "sampling_frequency",
+                    "description": "Sampling frequency. If None, will try to read from the NWB file",
+                    "type": "Optional[float]",
+                    "default": null
                 }
             ],
             "attributes": [

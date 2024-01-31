@@ -12,8 +12,8 @@ from .compute_correlograms_data import compute_correlogram_data
 from .NwbExtractors import NwbSortingExtractor
 
 
-def create_units_vis(url, *, units_path: Optional[str] = None):
-    sorting = NwbSortingExtractor(url, stream_mode="remfile", units_path=units_path)
+def create_units_vis(url, *, units_path: Optional[str] = None, sampling_frequency: Optional[float] = None):
+    sorting = NwbSortingExtractor(url, stream_mode="remfile", units_path=units_path, sampling_frequency=sampling_frequency)
     remf = remfile.File(url)
     with h5py.File(remf, "r") as file:
         v_rp = create_raster_plot(sorting=sorting)

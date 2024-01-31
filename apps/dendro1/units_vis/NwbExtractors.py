@@ -456,7 +456,7 @@ class NwbSortingExtractor(BaseSorting):
         samples_for_rate_estimation: int = 100000,
         stream_mode: str | None = None,
         stream_cache_path: str | Path | None = None,
-        units_path: str | None = None,
+        units_path: str | None = None
     ):
         try:
             from pynwb import NWBHDF5IO, NWBFile
@@ -502,21 +502,17 @@ class NwbSortingExtractor(BaseSorting):
 
         timestamps = None
         if sampling_frequency is None:
-            try:
-                # defines the electrical series from where the sorting came from
-                # important to know the sampling_frequency
-                self.electrical_series = retrieve_electrical_series(self._nwbfile, self._electrical_series_name)
-                # get rate
-                if self.electrical_series.rate is not None:
-                    sampling_frequency = self.electrical_series.rate
-                else:
-                    if hasattr(self.electrical_series, "timestamps"):
-                        if self.electrical_series.timestamps is not None:
-                            timestamps = self.electrical_series.timestamps
-                            sampling_frequency = 1 / np.median(np.diff(timestamps[samples_for_rate_estimation]))
-            except ValueError:
-                # if no electrical series is found, we're going to use a sampling frequency of 0
-                sampling_frequency = 0
+            # defines the electrical series from where the sorting came from
+            # important to know the sampling_frequency
+            self.electrical_series = retrieve_electrical_series(self._nwbfile, self._electrical_series_name)
+            # get rate
+            if self.electrical_series.rate is not None:
+                sampling_frequency = self.electrical_series.rate
+            else:
+                if hasattr(self.electrical_series, "timestamps"):
+                    if self.electrical_series.timestamps is not None:
+                        timestamps = self.electrical_series.timestamps
+                        sampling_frequency = 1 / np.median(np.diff(timestamps[samples_for_rate_estimation]))
 
         assert sampling_frequency is not None, (
             "Couldn't load sampling frequency. Please provide it with the " "'sampling_frequency' argument"
