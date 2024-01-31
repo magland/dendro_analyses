@@ -18,7 +18,7 @@ def create_units_vis(url, *, units_path: Optional[str] = None):
     with h5py.File(remf, "r") as file:
         v_rp = create_raster_plot(sorting=sorting)
         v_ac = create_autocorrelograms(sorting=sorting)
-        v_u = create_units_table(unit_ids=sorting.get_unit_ids(), file=file)
+        v_u = create_units_table(unit_ids=sorting.get_unit_ids(), file=file, units_path=units_path)
 
     v_right = vv.Splitter(
         item1=vv.LayoutItem(v_u), item2=vv.LayoutItem(v_rp), direction="vertical"
