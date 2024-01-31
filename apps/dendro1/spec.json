@@ -27,7 +27,8 @@
                 {
                     "name": "spatial_series_path",
                     "description": "Path to spatial series within NWB file, e.g. 'processing/behavior/Position/SpatialSeriesLED1'",
-                    "type": "str"
+                    "type": "str",
+                    "default": null
                 },
                 {
                     "name": "units_path",
@@ -38,7 +39,8 @@
                 {
                     "name": "num_bins",
                     "description": "Number of bins (in one dimension) for tuning curves",
-                    "type": "int"
+                    "type": "int",
+                    "default": null
                 }
             ],
             "attributes": [
@@ -124,6 +126,40 @@
                 }
             ],
             "parameters": [],
+            "attributes": [
+                {
+                    "name": "wip",
+                    "value": true
+                }
+            ],
+            "tags": []
+        },
+        {
+            "name": "dendro1.quip",
+            "description": "Run Quip on an electrophysiology NWB file",
+            "label": "dendro1.quip",
+            "inputs": [
+                {
+                    "name": "input",
+                    "description": "Input .nwb file"
+                }
+            ],
+            "inputFolders": [],
+            "outputs": [],
+            "outputFolders": [
+                {
+                    "name": "output",
+                    "description": "Output .json file"
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "electrical_series_path",
+                    "description": "Path to the electrical series in the NWB file, e.g., /acquisition/ElectricalSeries",
+                    "type": "str",
+                    "default": null
+                }
+            ],
             "attributes": [
                 {
                     "name": "wip",

@@ -31,12 +31,14 @@
                 {
                     "name": "timeseries_name",
                     "description": "Timeseries name, e.g. cursor_pos",
-                    "type": "str"
+                    "type": "str",
+                    "default": null
                 },
                 {
                     "name": "max_iterations",
                     "description": "Max iterations",
-                    "type": "int"
+                    "type": "int",
+                    "default": null
                 }
             ],
             "attributes": [
